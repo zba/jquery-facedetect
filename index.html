@@ -7,12 +7,31 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    
+    <script type="text/javascript" src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://blueimp.github.com/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"</script>
+    <script type="text/javascript" src="http://blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js"></script>
+    <script type="text/javascript" src="http://blueimp.github.com/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="http://blueimp.github.com/jQuery-File-Upload/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="http://blueimp.github.com/jQuery-File-Upload/js/jquery.fileupload-fp.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.10/jquery.Jcrop.js"></script>
+    <script>
+    var facedetect_config=[];
+    facedetect_config['cascade_path']="js/face.json";
+    </script>
 
+    
+    
+    <script type="text/javascript" src="js/facedetect.js"></script>
+    
+    <script type="text/javascript" src="js/demo.js"></script>
     <title>Jquery-facedetect by zba</title>
-  </head>
+
+    
+    </head>
 
   <body>
-
     <header>
       <div class="container">
         <h1>Jquery-facedetect</h1>
@@ -26,6 +45,9 @@
       </div>
     </header>
 
+ <img id="main_image" src="images/demo.jpg">
+ <div id="thumbnail"></div>
+ <input id="upload" type="file">
  
 
     

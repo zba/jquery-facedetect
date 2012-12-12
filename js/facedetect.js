@@ -7,51 +7,39 @@ var methods={
 	  post: function(comp) {
 	    console.log(comp);
 	  },
-	  async: false;
+	  async: false,
+	  detect: true
 	} , options);
 	var t=this;
+	var detect_result=[];
 	t.each(
 	  function() {
-	    if ($(this).data('facedetect')===undefined) {
-	      $(this).data('facedetect',{plugin:t;image: this});
+	    var $this=$(this);
+	    if ($this.data('facedetect')===undefined) {
+	      $this.data('facedetect',{plugin:t,image: this});
+	      if (o.detect) {
+	        if (o.async) {
+		 detect($this);
+		} else {
+		  detect_result.push(detect($this));
+		}
+	      }
 	    }
 	  }
 	);
-	
+	if (!o.async && o.detect) {
+	  return detect_result;
+	}
       },
       ready: function() {
 	return this.data('facedetect').ready;
       },
-      detect: function(){
-      var image=this.get(0);
-      if (this.comp!==undefined) {
-	if (o.async) {
-	  o.post(this.comp);
-	  return;
-	}
-	return this.comp;
-      }
-      if (o.async) {
-	ccv.detect_objects({ "canvas" : ccv.grayscale(ccv.pre(image)),
-	 "cascade" : cascade,
-	 "interval" : 5,
-	 "min_neighbors" : 1,
-	 "async" : true,
-	 "worker" : 1 })(o.post);
-	} else {
-	  var comp = ccv.detect_objects({ "canvas" : ccv.grayscale(ccv.pre(image)),
-	  "cascade" : cascade,
-	  "interval" : 5,
-	  "min_neighbors" : 1 });
-	  this.comp=comp;
-	  return comp;
-	}
-      }
+      detect: function() {detect(this);}
+     
 };
 
 var cascade;
 var init=function () {
-    cascade_load();
     $.fn.facedetect = function(method) {
     if (methods[method]) {
       return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -66,13 +54,39 @@ var cascade_load=function() {
   $.ajax({
     async: false,
     cache: true,
-    url: "/js/face.json".
+    url: facedetect_config['cascade_path'],
     dataType: 'json',
     success: function(data) {
       cascade=data;
     }   
   });
 };
+cascade_load();
+function detect(that){
+      if (that.comp!==undefined) {
+	if (o.async) {
+	  o.post(this.comp);
+	  return;
+	}
+	return that.comp;
+      }
+      var image=that.clone().get(0);
+      if (o.async) {
+	ccv.detect_objects({ "canvas" : ccv.grayscale(ccv.pre(image)),
+	 "cascade" : cascade,
+	 "interval" : 5,
+	 "min_neighbors" : 1,
+	 "async" : true,
+	 "worker" : 1 })(o.post);
+	} else {
+	  var comp = ccv.detect_objects({ "canvas" : ccv.grayscale(ccv.pre(image)),
+	  "cascade" : cascade,
+	  "interval" : 5,
+	  "min_neighbors" : 1 });
+	  that.comp=comp;
+	  return comp;
+	}
+}
 //   https://github.com/liuliu/ccv/tree/stable/js
 if (parallable === undefined) {
 	var parallable = function (file, funct) {
@@ -539,4 +553,4 @@ var onmessage = function (event) {
 init();
 
   
-}(jQuery);
+})(jQuery);
